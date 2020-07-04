@@ -1,0 +1,33 @@
+{
+  "variables": {
+    "aws_access_key": "{{ env `AWS_ACCESS_KEY_ID` }}",
+    "aws_secret_key": "{{ env `AWS_SECRET_ACCESS_KEY` }}",
+    "region": "{{ env `DEFAULT_REGION` }}"
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "ami_name": "packer-debian-wireguard-thrift-{{timestamp}}",
+      "instance_type": "{{ user `instance_type` }}",
+      "access_key": "{{ user `aws_access_key` }}",
+      "secret_key": "{{ user `aws_secret_key` }}",
+      "region": "{{ user `region` }}",
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "root-device-type": "ebs",
+          "name": "debian-10-amd64-*"
+        },
+        "owners": ["136693071363"],
+        "most_recent": true
+      },
+      "ssh_username": "admin"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "./provision_ami.sh"
+    }
+  ]
+}
