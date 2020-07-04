@@ -1,0 +1,9 @@
+https://github.com/github/gitignore/blob/master/Packer.gitignore
+# Cache objects
+packer_cache/
+
+# Crash log
+crash.log
+
+# For built boxes
+*.box
