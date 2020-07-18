@@ -1,6 +1,11 @@
+variable "region" {
+  description = "The AWS region in which we'll create this Terraform module"
+  type        = string
+}
+
 variable "ssh_key_id" {
   description = "Which SSH key ID to allow access to the Wireguard VPN instances"
-  default     = "foo"
+  type        = string
 }
 
 variable "instance_type" {
@@ -12,7 +17,6 @@ variable "instance_type" {
 variable "ami_id" {
   description = "Amazon Machine Image ID which has Wireguard pre-installed, to use for the VPN instance"
   type        = string
-  default     = "foo"
 }
 
 variable "asg_min_size" {
@@ -36,6 +40,8 @@ variable "asg_desired_size" {
 # A /25 is recommended, can be a wider range than this
 # Here's how to compute this: 
 # Number of maximum IPs in _one_ availability zone/subnet * number of allowed subnets * 2 (private + public) 
+# should be greater than the number of Hosts listed on http://jodies.de/ipcalc for your range.
+# The lowest AWS allows us to go is /28.
 variable "vpc_cidr_range" {
   type        = string
   default     = "10.0.0.0/25"
@@ -44,7 +50,6 @@ variable "vpc_cidr_range" {
 
 variable "allowed_availability_zone_ids" {
   type        = list
-  default     = ["aps1-az1", "aps1-az2", "aps1-az3"]
   description = "Which availability zones should we spin up Wireguard instances in?"
 }
 
@@ -57,5 +62,10 @@ variable "ssh_allow_ip_range" {
 variable "wg_server_private_key_path" {
   description = "The SSM parameter configuration path containing the private key for the Wireguard server"
   type        = string
-  default     = "foo"
+}
+
+variable "wg_server_port" {
+  description = "The port that Wireguard server is available on"
+  type        = number
+  default     = 51820
 }
