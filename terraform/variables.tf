@@ -1,6 +1,12 @@
+# AWS Configurations
 variable "region" {
   description = "The AWS region in which we'll create this Terraform module"
   type        = string
+}
+
+variable "allowed_availability_zone_ids" {
+  type        = list
+  description = "Which availability zones should we spin up Wireguard instances in?"
 }
 
 variable "ssh_key_id" {
@@ -8,6 +14,7 @@ variable "ssh_key_id" {
   type        = string
 }
 
+# Compute (Instance+ASG+Spot) Configurations
 variable "instance_type" {
   description = "Instance size to use for the Wireguard VPN instance"
   default     = "t3a.nano"
@@ -37,6 +44,12 @@ variable "asg_desired_size" {
   description = "Desired number of instances in the Auto Scaling Group"
 }
 
+variable "spot_max_price" {
+  type = string
+  description = "Maximum price for Spot Instances that you're willing to pay in USD"
+}
+
+# Network Configurations
 # A /25 is recommended, can be a wider range than this
 # Here's how to compute this: 
 # Number of maximum IPs in _one_ availability zone/subnet * number of allowed subnets * 2 (private + public) 
@@ -46,11 +59,6 @@ variable "vpc_cidr_range" {
   type        = string
   default     = "10.0.0.0/25"
   description = "Range of IP addresses in the AWS Virtual Private Network"
-}
-
-variable "allowed_availability_zone_ids" {
-  type        = list
-  description = "Which availability zones should we spin up Wireguard instances in?"
 }
 
 variable "ssh_allow_ip_range" {

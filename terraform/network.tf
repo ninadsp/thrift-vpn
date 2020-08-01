@@ -1,7 +1,3 @@
-# VPC with a really small range
-# Public subnet
-# Security groups
-
 locals {
   num_azs = length(var.allowed_availability_zone_ids)
 }
