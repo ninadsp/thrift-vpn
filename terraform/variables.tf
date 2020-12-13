@@ -21,11 +21,6 @@ variable "instance_type" {
   type        = string
 }
 
-variable "ami_id" {
-  description = "Amazon Machine Image ID which has Wireguard pre-installed, to use for the VPN instance"
-  type        = string
-}
-
 variable "asg_min_size" {
   type        = number
   default     = 1
