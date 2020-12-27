@@ -53,6 +53,10 @@ resource "aws_launch_template" "wg_launch_template" {
   key_name                             = var.ssh_key_id
   instance_initiated_shutdown_behavior = "terminate"
 
+  credit_specification {
+    cpu_credits = "standard"
+  }
+
   user_data = base64encode(data.template_file.user_data.rendered)
   iam_instance_profile {
     arn = aws_iam_instance_profile.wg_instance_profile.arn
