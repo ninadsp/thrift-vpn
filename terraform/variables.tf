@@ -40,7 +40,7 @@ variable "asg_desired_size" {
 }
 
 variable "spot_max_price" {
-  type = string
+  type        = string
   description = "Maximum price for Spot Instances that you're willing to pay in USD"
 }
 
@@ -57,18 +57,40 @@ variable "vpc_cidr_range" {
 }
 
 variable "ssh_allow_ip_range" {
-  type        = string
+  type        = list(string)
   description = "Which IP addresses to allow ssh access from"
-  default     = "127.0.0.1/32"
+  default     = ["127.0.0.1/32"]
 }
 
+# Wireguard configurations
 variable "wg_server_private_key_path" {
   description = "The SSM parameter configuration path containing the private key for the Wireguard server"
   type        = string
+}
+
+variable "wg_server_listen_addr" {
+  type        = string
+  description = "IP Address of the Wireguard server on the VPN"
+  default     = "10.0.1.1"
 }
 
 variable "wg_server_port" {
   description = "The port that Wireguard server is available on"
   type        = number
   default     = 51820
+}
+
+# 
+# [ { name = "dummy1", ip_addr = "10.0.1.2", pub_key = "foobarbaz=" },
+#   { name = "dummy2", ip_addr = "10.0.1.3", pub_key = "foobarbax=" },
+#   { name = "dummy3", ip_addr = "10.0.1.4", pub_key = "foobarbac=" }]
+#
+# 
+variable "wg_client_pub_keys" {
+  type = list(object({
+    name    = string
+    ip_addr = string
+    pub_key = string
+  }))
+  description = "List of maps of Client IPs and Public keys, as described in README"
 }

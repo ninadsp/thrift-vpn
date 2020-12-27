@@ -1,0 +1,22 @@
+#!/bin/bash
+
+cat > /etc/wireguard/wg0.conf.tpl <<EOF
+[Interface]
+Address = ${wg_server_listen_addr}
+ListenPort = ${wg_server_port}
+PrivateKey = __PRIVATE_KEY__
+
+${peers}
+EOF
+
+# fetch priv key during start up
+wg_priv_key=$(aws ssm get-parameters --output text --region ${region} --names ${wg_priv_key_path} --with-decryption --query 'Parameters[*].Value')
+
+sed "s/__PRIVATE_KEY__/$wg_priv_key/g" /etc/wireguard/wg0.conf.tpl > /etc/wireguard/wg0.conf
+rm /etc/wireguard/wg0.conf.tpl
+
+ifname=$(ip link | awk -F: '$0 !~ "lo|vir|wl|wg|^[^0-9]"{print $2;getline}' | tr -d ' ')
+nft add rule ip nat POSTROUTING ip saddr ${wg_server_listen_addr}/24 oifname "$ifname" masquerade
+nft list ruleset > /etc/nftables.conf
+
+systemctl restart wg-quick@wg0.service
