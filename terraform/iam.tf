@@ -23,6 +23,22 @@ data "aws_iam_policy_document" "wg_instance_profile_doc" {
 
     resources = ["arn:aws:kms:${var.region}:${data.aws_caller_identity.current.account_id}:key/*"]
   }
+
+  statement {
+    sid = "InstanceRenameAccess"
+
+    effect = "Allow"
+
+    actions = ["ec2:CreateTags"]
+
+    resources = ["*"]
+
+    condition {
+      test = "StringEquals"
+      variable = "ec2:ResourceTag/aws:autoscaling:groupName"
+      values = [aws_autoscaling_group.wg_asg.name]
+    }
+  }
 }
 
 data "aws_iam_policy_document" "wg_instance_profile_assume_role_doc" {

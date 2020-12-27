@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Set a human readable instance name
+# http://names.drycodes.com/
+if [[ -f /var/lib/cloud/data/instance-id ]] ; then
+  new_instance_name=$(curl --silent "http://names.drycodes.com/10?case=lower&separator=-&format=text" | shuf | head -1)
+  aws ec2 create-tags --region ${region} --resources "$(cat /var/lib/cloud/data/instance-id)" --tags Key=Name,Value=$new_instance_name
+fi
+
 cat > /etc/wireguard/wg0.conf.tpl <<EOF
 [Interface]
 Address = ${wg_server_listen_addr}
