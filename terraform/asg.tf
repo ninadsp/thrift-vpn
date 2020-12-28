@@ -31,6 +31,8 @@ data "template_file" "user_data" {
     wg_priv_key_path      = var.wg_server_private_key_path
     region                = var.region
     peers                 = join("\n", data.template_file.wg_client_template.*.rendered)
+
+    post_provisioning_steps = var.post_provisioning_steps
   }
 }
 

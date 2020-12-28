@@ -8,7 +8,7 @@ data "aws_iam_policy_document" "wg_instance_profile_doc" {
 
     actions = ["ssm:GetParameters"]
 
-    resources = [data.aws_ssm_parameter.wg_server_private_key.arn]
+    resources = ["arn:aws:ssm:${var.region}:${data.aws_caller_identity.current.account_id}:parameter/wireguard/*"]
   }
 
   statement {
@@ -34,9 +34,9 @@ data "aws_iam_policy_document" "wg_instance_profile_doc" {
     resources = ["*"]
 
     condition {
-      test = "StringEquals"
+      test     = "StringEquals"
       variable = "ec2:ResourceTag/aws:autoscaling:groupName"
-      values = [aws_autoscaling_group.wg_asg.name]
+      values   = [aws_autoscaling_group.wg_asg.name]
     }
   }
 }

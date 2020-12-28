@@ -1,10 +1,11 @@
 #!/bin/bash
 
+aws_region=${region}
 # Set a human readable instance name
 # http://names.drycodes.com/
 if [[ -f /var/lib/cloud/data/instance-id ]] ; then
   new_instance_name=$(curl --silent "http://names.drycodes.com/10?case=lower&separator=-&format=text" | shuf | head -1)
-  aws ec2 create-tags --region ${region} --resources "$(cat /var/lib/cloud/data/instance-id)" --tags Key=Name,Value=wg-$new_instance_name
+  aws ec2 create-tags --region $aws_region --resources "$(cat /var/lib/cloud/data/instance-id)" --tags Key=Name,Value=wg-$new_instance_name
 fi
 
 cat > /etc/wireguard/wg0.conf.tpl <<EOF
@@ -17,7 +18,7 @@ ${peers}
 EOF
 
 # fetch priv key during start up
-wg_priv_key=$(aws ssm get-parameters --output text --region ${region} --names ${wg_priv_key_path} --with-decryption --query 'Parameters[*].Value')
+wg_priv_key=$(aws ssm get-parameters --output text --region $aws_region --names ${wg_priv_key_path} --with-decryption --query 'Parameters[*].Value')
 
 sed "s/__PRIVATE_KEY__/$wg_priv_key/g" /etc/wireguard/wg0.conf.tpl > /etc/wireguard/wg0.conf
 rm /etc/wireguard/wg0.conf.tpl
@@ -27,3 +28,6 @@ nft add rule ip nat POSTROUTING ip saddr ${wg_server_listen_addr}/24 oifname "$i
 nft list ruleset > /etc/nftables.conf
 
 systemctl restart wg-quick@wg0.service
+
+${post_provisioning_steps}
+

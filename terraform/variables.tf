@@ -94,3 +94,10 @@ variable "wg_client_pub_keys" {
   }))
   description = "List of maps of Client IPs and Public keys, as described in README"
 }
+
+# Custom post provisioning steps, if any
+variable "post_provisioning_steps" {
+  description = "Optional set of commands to execute once the wireguard server has been provisioned"
+  type        = string
+  default     = ""
+}
