@@ -56,4 +56,8 @@ curl --silent -X POST "$slack_webhook" --data-urlencode 'payload={"text": "VPN s
 EOF
 ```
 
+## Credits
+
+Thanks to github.com/SathyaBhat/folding-aws for nudging me to automate my VPN server's setup and github.com/jmhale/terraform-aws-wireguard for helping me understand how to work with Cloud Init/user-data templates.
+
 TODO: harden nftables: https://xdeb.org/post/2019/09/26/setting-up-a-server-firewall-with-nftables-that-support-wireguard-vpn/
