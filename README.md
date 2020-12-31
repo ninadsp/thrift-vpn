@@ -60,4 +60,15 @@ EOF
 
 Thanks to https://github.com/SathyaBhat/folding-aws/ for nudging me to automate my VPN server's setup and https://github.com/jmhale/terraform-aws-wireguard for helping me understand how to work with Cloud Init/user-data templates.
 
-TODO: harden nftables: https://xdeb.org/post/2019/09/26/setting-up-a-server-firewall-with-nftables-that-support-wireguard-vpn/
+## TODO
+
+[ ] harden nftables: https://xdeb.org/post/2019/09/26/setting-up-a-server-firewall-with-nftables-that-support-wireguard-vpn/
+[ ] Break up post processing examples into composable components
+[ ] AWS Route53 example for DNS update
+[ ] Example for DNS adblocking via the VPN
+[ ] Choosing a good OpenNIC upstream for the DNS server
+[ ] Example command to recycle instance(s) in the ASG
+[ ] Tasker integration examples
+[ ] Make documentation and project better for non-DevOps/SRE/SysAdmin folks
+[ ] Test with ARM/Graviton systems on AWS
+[ ] Performance tests and tuning
