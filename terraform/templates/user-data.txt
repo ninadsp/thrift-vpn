@@ -24,9 +24,12 @@ sed "s/__PRIVATE_KEY__/$wg_priv_key/g" /etc/wireguard/wg0.conf.tpl > /etc/wiregu
 rm /etc/wireguard/wg0.conf.tpl
 
 ifname=$(ip link | awk -F: '$0 !~ "lo|vir|wl|wg|^[^0-9]"{print $2;getline}' | tr -d ' ')
-nft add rule ip nat POSTROUTING ip saddr ${wg_server_listen_addr}/24 oifname "$ifname" masquerade
-nft list ruleset > /etc/nftables.conf
+sed -i "s/define wan = ens5/define wan = $ifname/" /etc/nftables.conf
+sed -i "s/define vpn_port = 51820/define vpn_port = ${wg_server_port}/" /etc/nftables.conf
+sed -i "s/define vpn_net = 10.0.1.0\/24/define vpn_net = ${wg_server_listen_addr}\/24/" /etc/nftables.conf
+systemctl reload nftables
 
+systemctl enable wg-quick@wg0.service
 systemctl restart wg-quick@wg0.service
 
 ${post_provisioning_steps}
