@@ -48,7 +48,7 @@ wg_client_pub_keys = [
 ]
 ```
 
-Please see the [Examples](./examples.md) for a more detailed set of code snippets to use a functioning VPN server.
+Please see [examples](./examples.md) for a more detailed set of code snippets to use a functioning VPN server.
 
 ## Credits
 
@@ -56,7 +56,7 @@ Thanks to https://github.com/SathyaBhat/folding-aws/ for nudging me to automate 
 
 ## Contributing
 
-This source code is provided under the [MIT License](./LICENSE), feel free to customise and re-use as per the terms of the license. To contribute to this project, please follow the standard forking+pull request [model](https://guides.github.com/activities/forking/). ## Issues
+This source code is provided under the [MIT License](./LICENSE), feel free to customise and re-use as per terms of the license. To contribute to this project, please follow the standard forking+pull request [model](https://guides.github.com/activities/forking/).
 
 ## Issues
 
@@ -72,7 +72,8 @@ Eventually, I wish to automate some parts of this testing, and maybe an end-to-e
 
 ## Notes
 
-The ASG currently sets a max lifetime period of 1 month
+The ASG currently sets a max lifetime period of 1 month, at which time, a new instance will be provisioned. This will only change the IP address of your internet traffic, this will not ensure a newly patched/more secure instance being provisioned. Do consider periodically running the packer builds to use newer security patches and base images.
+
 ## References
 
 * [Blog post](https://ninad.pundaliks.in/blog/2020/12/thrift-vpn/) about the various choices that I took to pick this combination of components
@@ -88,7 +89,7 @@ The ASG currently sets a max lifetime period of 1 month
 - [ ] Tasker integration examples
 - [ ] Make documentation and project better for non-DevOps/SRE/SysAdmin folks
 - [ ] Add tests
-- [ ] Automate AMI building to give a reasonably recent, patched base instance
+- [ ] Automate AMI building to give a reasonably recent, patched base instance. [Reference](https://aws.amazon.com/blogs/mt/creating-packer-images-using-system-manager-automation/)
 - [ ] Test with ARM/Graviton systems on AWS
 - [ ] Performance tests and tuning
 - [ ] Figure out how to do DDoS protection at netdev filter correctly
