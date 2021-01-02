@@ -72,6 +72,9 @@ table inet filter {
 
     # Allow WireGuard traffic to access the internet via wan.
     iifname \$vpn oifname \$wan ct state new accept
+
+    # Allow WireGuard clients to connect with each other
+    iifname \$vpn oifname \$vpn ct state new accept
   }
 
   chain output {
