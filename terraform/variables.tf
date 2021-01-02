@@ -5,8 +5,10 @@ variable "region" {
 }
 
 variable "allowed_availability_zone_ids" {
+  # Note, this is Zone IDs, not Zone Names
+  # https://docs.aws.amazon.com/ram/latest/userguide/working-with-az-ids.html
   type        = list
-  description = "Which availability zones should we spin up Wireguard instances in?"
+  description = "Which availability zone ID should we spin up Wireguard instances in?"
 }
 
 variable "ssh_key_id" {
@@ -81,10 +83,11 @@ variable "wg_server_port" {
 }
 
 # 
-# [ { name = "dummy1", ip_addr = "10.0.1.2", pub_key = "foobarbaz=" },
+# wg_client_pub_keys = [ 
+#   { name = "dummy1", ip_addr = "10.0.1.2", pub_key = "foobarbaz=" },
 #   { name = "dummy2", ip_addr = "10.0.1.3", pub_key = "foobarbax=" },
-#   { name = "dummy3", ip_addr = "10.0.1.4", pub_key = "foobarbac=" }]
-#
+#   { name = "dummy3", ip_addr = "10.0.1.4", pub_key = "foobarbac=" }
+# ]
 # 
 variable "wg_client_pub_keys" {
   type = list(object({
@@ -97,7 +100,7 @@ variable "wg_client_pub_keys" {
 
 # Custom post provisioning steps, if any
 variable "post_provisioning_steps" {
-  description = "Optional set of commands to execute once the wireguard server has been provisioned"
+  description = "Optional set of commands to execute once the wireguard server has been provisioned. Is executed in the cloud-init environment via the user-data parameter"
   type        = string
   default     = ""
 }
