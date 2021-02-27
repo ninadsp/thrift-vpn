@@ -2,12 +2,13 @@
   "variables": {
     "aws_access_key": "{{ env `AWS_ACCESS_KEY_ID` }}",
     "aws_secret_key": "{{ env `AWS_SECRET_ACCESS_KEY` }}",
-    "region": "{{ env `DEFAULT_REGION` }}"
+    "region": "{{ env `DEFAULT_REGION` }}",
+    "cpu_arch": "amd64"
   },
   "builders": [
     {
       "type": "amazon-ebs",
-      "ami_name": "packer-debian-wireguard-thrift-amd64-{{timestamp}}",
+      "ami_name": "packer-debian-wireguard-thrift-{{user `cpu_arch`}}-{{timestamp}}",
       "instance_type": "{{ user `instance_type` }}",
       "access_key": "{{ user `aws_access_key` }}",
       "secret_key": "{{ user `aws_secret_key` }}",
@@ -16,7 +17,7 @@
         "filters": {
           "virtualization-type": "hvm",
           "root-device-type": "ebs",
-          "name": "debian-10-amd64-*"
+          "name": "debian-10-{{user `cpu_arch`}}-*"
         },
         "owners": ["136693071363"],
         "most_recent": true
