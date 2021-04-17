@@ -141,7 +141,7 @@ aws autoscaling set-desired-capacity --auto-scaling-group-name wireguard_asg --d
 Sometimes, it might be necessary to terminate the instance in the ASG pool before creating a new one. This will cause a small amount of downtime for clients of the VPN, for the amount of time it takes to provision a new instance in the pool and the DNS record changes to be propagated to all clients.
 
 ```
-aws autoscaling terminate-instance-in-auto-scaling-group --instance-id $(aws autoscaling describe-auto-scaling-instances --query "AutoScalingInstances[?AutoScalingGroupName=='wireguard_asg'].InstanceId" --output text)
+aws autoscaling terminate-instance-in-auto-scaling-group --no-should-decrement-desired-capacity --instance-id $(aws autoscaling describe-auto-scaling-instances --query "AutoScalingInstances[?AutoScalingGroupName=='wireguard_asg'].InstanceId" --output text)
 ```
 
 Or
