@@ -7,7 +7,7 @@ This project creates an auto scaling group in an AWS VPC and provisions a Wiregu
 ## Requirements
 
 * An [AWS account](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/).
-* A local [terraform installation](https://learn.hashicorp.com/tutorials/terraform/install-cli). This project has been tested with Terraform v 0.12, tests with newer versions appreciated.
+* A local [terraform installation](https://learn.hashicorp.com/tutorials/terraform/install-cli). This project has been tested with Terraform v 0.15, tests with newer versions appreciated. The minimum required version of terraform in this repository is 0.14 currently.
 * A local [packer installation](https://learn.hashicorp.com/tutorials/packer/getting-started-install).
 * Optional, but recommended: A local [Wireguard installation](https://www.wireguard.com/install/) to generate the key pairs (identities) for the various devices in the VPN.
 * Optional, but recommended: An account with a DNS service provider that provides an API to update DNS records and a DNS domain/zone hosted with them.
@@ -49,6 +49,12 @@ wg_client_pub_keys = [
 ```
 
 Please see [examples](./examples.md) for a more detailed set of code snippets to use a functioning VPN server.
+
+## Upgrades
+
+### 0.12 -> 0.15
+
+Terraform has been upgraded from `0.12` to `0.15` in this repository, which requires a change in the way provider versions are specified. I've updated this repository to reflect the changes. After fetching the latest Terraform binary, please run a `terraform init` and then a `terraform apply` to ensure that your statefile is updated to match the newer requirements. If you run into any issues with the `init` command, you might need to fetch the intermediate versions (0.13 and 0.14) and run the `0.13upgrade` command on 0.13, and do the init+apply dance at each step.
 
 ## Credits
 
