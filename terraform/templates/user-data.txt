@@ -1,10 +1,15 @@
 #!/bin/bash
 
 aws_region=${region}
+
 # Set a human readable instance name
-# http://names.drycodes.com/
 if [[ -f /var/lib/cloud/data/instance-id ]] ; then
-  new_instance_name=$(curl --silent "http://names.drycodes.com/10?case=lower&separator=-&format=text" | shuf | head -1)
+  # https://emojipedia.org/nature/ and https://www.w3docs.com/learn-css/css-color-names.html
+
+  animals="monkey gorilla orangutan dog poodle wolf fox raccoon cat lion tiger leopard horse unicorn zebra deer bison ox buffalo cow pig boar ram ewe goat camel llama giraffe elephant mammoth rhinoceros hippopotamus mouse rat hamster rabbit chipmunk beaver hedgehog bat bear koala panda sloth otter skunk kangaroo badger turkey chicken rooster penguin dove eagle duck swan owl dodo flamingo peacock parrot frog crocodile turtle lizard snake dragon sauropod t-rex whale dolphin seal fish blowfish shark octopus snail butterfly bug ant honeybee beetle cricket cockroach spider scorpion mosquito fly worm crab lobster shrimp squid"
+  colours="aliceblue antiquewhite aqua aquamarine azure beige bisque black blanchedalmond blue blueviolet brown burlywood cadetblue chocolate coral cornflowerblue cornsilk crimson cyan darkblue darkcyan darkgoldenrod darkgray darkgreen darkkhaki darkmagenta darkolivegreen darkorange darkorchid darkred darksalmon darkseagreen darkslateblue darkslategray darkturquoise darkviolet deeppink deepskyblue dimgray dodgerblue firebrick floralwhite forestgreen fuchsia gainsboro ghostwhite gold goldenrod gray green greenyellow honeydew hotpink indianred indigo ivory khaki lavender lavenderblush lawngreen lemonchiffon lightblue lightcoral lightcyan lightgoldenrodyellow lightgray lightgreen lightpink lightsalmon lightseagreen lightskyblue lightslategray lightsteelblue lightyellow lime limegreen linen magenta maroon mediumaquamarine mediumblue mediumorchid mediumpurple mediumseagreen mediumslateblue mediumspringgreen mediumturquoise mediumvioletred midnightblue mintcream mistyrose moccasin navajowhite navy oldlace olive olivedrab orange orangered orchid palegoldenrod palegreen paleturquoise palevioletred papayawhip peachpuff peru pink plum powderblue purple red rosybrown royalblue saddlebrown salmon sandybrown seagreen seashell sienna silver skyblue slateblue slategray snow springgreen steelblue tan teal thistle tomato turquoise violet wheat white whitesmoke yellow yellowgreen"
+
+  new_instance_name="$(shuf -e $animals | head -1)-$(shuf -e $colours | head -1)"
   aws ec2 create-tags --region $aws_region --resources "$(cat /var/lib/cloud/data/instance-id)" --tags Key=Name,Value=wg-$new_instance_name
 fi
 
