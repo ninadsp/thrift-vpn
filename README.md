@@ -52,13 +52,17 @@ Please see [examples](./examples.md) for a more detailed set of code snippets to
 
 ## Upgrades
 
-### 0.12 -> 0.15
+### Terraform 0.12 -> 0.15
 
 Terraform has been upgraded from `0.12` to `0.15` in this repository, which requires a change in the way provider versions are specified. I've updated this repository to reflect the changes. After fetching the latest Terraform binary, please run a `terraform init` and then a `terraform apply` to ensure that your statefile is updated to match the newer requirements. If you run into any issues with the `init` command, you might need to fetch the intermediate versions (0.13 and 0.14) and run the `0.13upgrade` command on 0.13, and do the init+apply dance at each step.
 
-### 0.15 -> 1.0
+### Terraform 0.15 -> 1.0
 
 Terraform version 1.0 is a continuation of the 0.15 series, and hence, everything should just work if you're on any 0.15 version. Tests with 1.0.5 are succeeding.
+
+### Packer 1.6.0 -> 1.7.2
+
+No-op update, should just work.
 
 ## Credits
 
