@@ -8,7 +8,7 @@ phases:
       - apt-get update -q
       - apt-get install -qy unzip
       - curl https://releases.hashicorp.com/packer/1.7.9/packer_1.7.9_linux_amd64.zip -o /tmp/packer.zip
-      - unzip /tmp/packer.zip -C /usr/local/bin
+      - unzip /tmp/packer.zip -d /usr/local/bin
   build:
     on-failure: ABORT
     commands:
