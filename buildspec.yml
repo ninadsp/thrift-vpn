@@ -1,13 +1,12 @@
 version: 0.2
-run-as: ubuntu
+run-as: root
 phases:
   install:
-    run-as: root
     on-failure: ABORT
     commands:
       - apt-get update -q
       - apt-get install -qy unzip
-      - curl https://releases.hashicorp.com/packer/1.7.9/packer_1.7.9_linux_amd64.zip -o /tmp/packer.zip
+      - curl --silent https://releases.hashicorp.com/packer/1.7.9/packer_1.7.9_linux_amd64.zip -o /tmp/packer.zip
       - unzip /tmp/packer.zip -d /usr/local/bin
   build:
     on-failure: ABORT
