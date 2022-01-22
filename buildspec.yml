@@ -1,0 +1,18 @@
+version: 0.2
+run-as: ubuntu
+phases:
+  install:
+    run-as: root
+    on-failure: ABORT
+    commands:
+      - apt-get update -q
+      - apt-get install -qy unzip
+      - curl https://releases.hashicorp.com/packer/1.7.9/packer_1.7.9_linux_amd64.zip -o /tmp/packer.zip
+      - unzip /tmp/packer.zip -C /usr/local/bin
+  build:
+    on-failure: ABORT
+    commands:
+      - cd $CODEBUILD_SRC_DIR/packer && packer -var instance_type=t4g.nano -var cpu_arch=arm64 -var region=ap-south-1 build debian_wireguard.json
+  post_build:
+    commands:
+      - aws ec2 describe-images --owners self --filters 'Name=name,Values=packer-debian-wireguard-thrift*'
