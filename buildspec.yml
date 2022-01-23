@@ -8,10 +8,12 @@ phases:
       - apt-get install -qy unzip
       - curl --silent https://releases.hashicorp.com/packer/1.7.9/packer_1.7.9_linux_amd64.zip -o /tmp/packer.zip
       - unzip /tmp/packer.zip -d /usr/local/bin
+      - pip install aws-amicleaner
   build:
     on-failure: ABORT
     commands:
-      - cd $CODEBUILD_SRC_DIR/packer && packer build -debug -var instance_type=t4g.nano -var cpu_arch=arm64 -var region=ap-south-1 debian_wireguard.json
+      - cd $CODEBUILD_SRC_DIR/packer && packer build debian_wireguard.json
   post_build:
     commands:
       - aws ec2 describe-images --owners self --filters 'Name=name,Values=packer-debian-wireguard-thrift*'
+      - amicleaner --full-report

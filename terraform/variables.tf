@@ -7,7 +7,7 @@ variable "region" {
 variable "allowed_availability_zone_ids" {
   # Note, this is Zone IDs, not Zone Names
   # https://docs.aws.amazon.com/ram/latest/userguide/working-with-az-ids.html
-  type        = list
+  type        = list(any)
   description = "Which availability zone ID should we spin up Wireguard instances in?"
 }
 
