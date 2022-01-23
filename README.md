@@ -4,6 +4,10 @@ Use Packer and Terraform to spin up a super cheap Wireguard VPN instance.
 
 This project creates an auto scaling group in an AWS VPC and provisions a Wireguard server on it with spot instances.
 
+## Goals
+
+Make it easy to host a VPN server on AWS with a very tiny footprint that is relatively up to date. It should periodically handle security updates automatically, and also keep changing IP addresses to help better preserve privacy of the users. This does not aim to prevent smart services and apps from tracking your data, users are often signed in already to them. It only aims to prevent local ISPs from snooping (or worse, injecting) on our traffic.
+
 ## Requirements
 
 * An [AWS account](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/).
@@ -22,7 +26,7 @@ This project creates an auto scaling group in an AWS VPC and provisions a Wiregu
 * Follow [these](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-su-create.html) steps to create an AWS SSM Parameter (type `SecureString`) and store the private key for the wireguard server in it. Note: The secure string will require you to choose a AWS KMS Key to encrypt/decrypt the parameter, it is ok to use the default key generated for your account/region.
 * Choose an instance type from [this page](https://aws.amazon.com/ec2/instance-types/). A General Purpose instance with low configurations is sufficient for this project. This project has currently been tested with `t3a.nano`, `t2.micro` and `t4g.micro` instance sizes.
 * Visit the AWS Spot Instances [pricing page](https://aws.amazon.com/ec2/spot/pricing/) and find the current prices for the chosen instance type and region. Add a few cents to the pricing to ensure that the spot request is fulfilled.
-* Change to the `packer` directory. Create a packer base image with `packer build -var instance_type=<chosen-instance-type> -var region=<your-region> packer/debian_wireguard.json`. If you wish to use a Graviton instance, also pass `-var cpu_arch=arm64`.
+* *Bootstrap Only*: Change to the `packer` directory. Create a packer base image with `packer build -var instance_type=<chosen-instance-type> -var region=<your-region> packer/debian_wireguard.json`. If you wish to use a Graviton instance, also pass `-var cpu_arch=arm64`. This step is only necessary for the very first time, an automated monthly build takes over once Terraform completes it's thing in the next step.
 * Change to the `terraform` directory. Create a `terraform.tfvars` file with the following minimum variables included in it: `region`, `allowed_availability_zone_ids`, `ssh_key_id`, `asg_min_size`, `asg_desired_size`, `spot_max_price`, `wg_server_listen_addr`, `wg_server_private_key_path` and `wg_client_pub_keys`.
 * Run `terraform plan` and inspect the output.
 * Run `terraform apply`, ensure that the changes match up with the plan output, and approve creation of all resources.
@@ -103,8 +107,8 @@ The ASG currently sets a max lifetime period of 1 month, at which time, a new in
 - [ ] Tasker integration examples
 - [ ] Make documentation and project better for non-DevOps/SRE/SysAdmin folks
 - [ ] Add tests
-- [ ] Automate AMI building to give a reasonably recent, patched base instance. [Reference](https://aws.amazon.com/blogs/mt/creating-packer-images-using-system-manager-automation/)
-- [ ] Test with ARM/Graviton systems on AWS
+- [x] Automate AMI building to give a reasonably recent, patched base instance. [Reference](https://aws.amazon.com/blogs/mt/creating-packer-images-using-system-manager-automation/)
+- [x] Test with ARM/Graviton systems on AWS
 - [ ] Performance tests and tuning
 - [ ] Figure out how to do DDoS protection at netdev filter correctly
 - [ ] Choosing a good OpenNIC upstream for the DNS server
