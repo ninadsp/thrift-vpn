@@ -24,16 +24,16 @@
         "owners": ["136693071363"],
         "most_recent": true
       },
-      "ssh_username": "admin"
-    },
-    "tags": {
-      "Name": "{{ user `ami_name` }}",
-      "role": "wireguard-vpn"
-    },
-    "snapshot_tags": {
-      "Name": "snap-{{ user `ami_name` }}",
-      "role": "wireguard-vpn"
-    }
+      "ssh_username": "admin",
+      "tags": {
+        "Name": "{{ user `ami_name` }}",
+        "role": "wireguard-vpn"
+      },
+      "snapshot_tags": {
+        "Name": "snap-{{ user `ami_name` }}",
+        "role": "wireguard-vpn"
+      }
+    }  
   ],
   "provisioners": [
     {
