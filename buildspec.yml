@@ -12,7 +12,7 @@ phases:
   build:
     on-failure: ABORT
     commands:
-      - cd $CODEBUILD_SRC_DIR/packer && packer -color=false build debian_wireguard.json
+      - cd $CODEBUILD_SRC_DIR/packer && packer build -color=false debian_wireguard.json
   post_build:
     commands:
       - aws ec2 describe-images --owners self --filters 'Name=name,Values=packer-debian-wireguard-thrift*'
