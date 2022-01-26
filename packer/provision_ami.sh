@@ -24,10 +24,9 @@ define wan = ens5
 table inet filter {
   
   # https://wiki.nftables.org/wiki-nftables/index.php/Sets
-  # Consider switching to "flags interval;" for mosh/other tools
-  set tcp_accepted { type inet_service; elements = { 22 } }
+  set tcp_accepted { type inet_service; flags interval; elements = { 22 } }
 
-  set udp_accepted { type inet_service; elements = { \$vpn_port } }
+  set udp_accepted { type inet_service; flags interval; elements = { \$vpn_port } }
 
   chain reusable_checks {
     # Drop invalid packets
