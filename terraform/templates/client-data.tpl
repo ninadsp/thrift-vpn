@@ -1,5 +1,7 @@
+%{ for peer in wg_client_pub_keys ~}
 [Peer]
-# ${peer_name}
-AllowedIPs = ${peer_address}
-Publickey = ${peer_pub_key}
+# ${peer.name}
+AllowedIPs = ${peer.ip_addr}
+Publickey = ${peer.pub_key}
 
+%{ endfor ~}

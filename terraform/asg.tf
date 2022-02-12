@@ -22,29 +22,26 @@ data "aws_ami" "wg_ami" {
   }
 }
 
-data "template_file" "user_data" {
-  template = file("${path.module}/templates/user-data.txt")
+locals {
+  user_data = templatefile(
+    "${path.module}/templates/user-data.txt",
+    {
+      wg_server_listen_addr = var.wg_server_listen_addr
+      wg_server_port        = var.wg_server_port
+      wg_priv_key_path      = var.wg_server_private_key_path
+      region                = var.region
+      peers                 = local.wg_client_template
 
-  vars = {
-    wg_server_listen_addr = var.wg_server_listen_addr
-    wg_server_port        = var.wg_server_port
-    wg_priv_key_path      = var.wg_server_private_key_path
-    region                = var.region
-    peers                 = join("\n", data.template_file.wg_client_template.*.rendered)
+      post_provisioning_steps = var.post_provisioning_steps
+    }
+  )
 
-    post_provisioning_steps = var.post_provisioning_steps
-  }
-}
-
-data "template_file" "wg_client_template" {
-  template = file("${path.module}/templates/client-data.tpl")
-  count    = length(var.wg_client_pub_keys)
-
-  vars = {
-    peer_name    = var.wg_client_pub_keys[count.index].name
-    peer_address = var.wg_client_pub_keys[count.index].ip_addr
-    peer_pub_key = var.wg_client_pub_keys[count.index].pub_key
-  }
+  wg_client_template = templatefile(
+    "${path.module}/templates/client-data.tpl",
+    {
+      wg_client_pub_keys = var.wg_client_pub_keys
+    }
+  )
 }
 
 resource "aws_launch_template" "wg_launch_template" {
@@ -59,7 +56,7 @@ resource "aws_launch_template" "wg_launch_template" {
     cpu_credits = "standard"
   }
 
-  user_data = base64encode(data.template_file.user_data.rendered)
+  user_data = base64encode(local.user_data)
   iam_instance_profile {
     arn = aws_iam_instance_profile.wg_instance_profile.arn
   }
