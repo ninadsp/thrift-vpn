@@ -1,5 +1,13 @@
 # Thrift VPN
 
+## NOTE
+
+This project uses an older version of Debian as it's base operating system, which now receives infrequent security updates and support. If you need a VPN for security reasons, this project will no longer meet your goals. I may get time to update the project in the future, but I do not advise using this project till further notice. 
+
+Any PRs updating the project to current Debian versions are welcome. 
+
+---
+
 Use Packer and Terraform to spin up a super cheap Wireguard VPN instance.
 
 This project creates an auto scaling group in an AWS VPC and provisions a Wireguard server on it with spot instances.
